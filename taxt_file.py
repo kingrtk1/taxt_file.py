@@ -1,15 +1,26 @@
 import os
 
+# Define the ASCII art text for the logo
+logo = """
+██████╗░████████╗██╗░░██╗
+██╔══██╗╚══██╔══╝██║░██╔╝
+██████╔╝░░░██║░░░█████═╝░
+██╔══██╗░░░██║░░░██╔═██╗░
+██║░░██║░░░██║░░░██║░╚██╗
+╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝
+"""
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def menu():
     clear_screen()
+    print(logo)  # Print the logo
     print('1. Cookies Remove')
     print('2. Number Remove')
     print('3. Middle Line Remove')
     print('4. Line Cutter')  
-    print('5. Separate Lines by Keyword')  # Added Separate Lines by Keyword option
+    print('5. Separate Lines by Keyword')
     print('6. Exit')
     choice = input('>> ')
     if choice == '1':
