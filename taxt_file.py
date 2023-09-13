@@ -19,7 +19,7 @@ def menu():
     print('1. Cookies Remove')
     print('2. Number Remove')
     print('3. Middle Line Remove')
-    print('4. Line Cutter')  
+    print('4. Line Cutter')
     print('5. Search and Extract Lines by Keyword')
     print('6. Exit')
     choice = input('>> ')
@@ -34,11 +34,14 @@ def menu():
         process_file(remove_middle_line, file_path)
     elif choice == '4':
         file_path = input('Input File Path > ')
-        combine_every_two_lines(file_path)  # Call the line cutter function
+        combine_every_two_lines(file_path)
     elif choice == '5':
         input_file = input("Enter the input file path: ")
-        keyword = input("Enter the keyword or phrase to search for: ")
-        extract_lines_with_keyword(input_file, keyword)
+        keywords = input("Enter keywords search for (comma-separated): ")
+        keywords = [keyword.strip() for keyword in keywords.split(',')]
+        output_file = input("Enter the output file path: ")
+        extract_lines_with_keywords(input_file, output_file, keywords)
+        print(f"Lines containing keywords extracted to {output_file}")
     elif choice == '6':
         exit()
     else:
@@ -105,19 +108,24 @@ def combine_every_two_lines(file_path):
     with open(file_path, 'w') as file:
         file.write('\n'.join(formatted_lines))
 
-def extract_lines_with_keyword(input_file, keyword):
+def extract_lines_with_keywords(input_file, output_file, keywords):
     try:
         with open(input_file, 'r') as infile:
             lines = infile.readlines()
 
-        matching_lines = [line for line in lines if keyword in line]
+        matching_lines = [line for line in lines if any(keyword in line for keyword in keywords)]
 
-        output_file = 'extracted_lines.txt'
         with open(output_file, 'w') as outfile:
             for line in matching_lines:
                 outfile.write(line)
 
-        print(f"Lines containing '{keyword}' extracted to {output_file}")
+        # Remove the matching lines from the original file
+        with open(input_file, 'w') as infile:
+            for line in lines:
+                if not any(keyword in line for keyword in keywords):
+                    infile.write(line)
+
+        print(f"Lines containing keywords extracted to {output_file}")
     except FileNotFoundError:
         print("Input file not found.")
 
