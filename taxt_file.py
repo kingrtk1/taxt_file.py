@@ -20,7 +20,7 @@ def menu():
     print('2. Number Remove')
     print('3. Middle Line Remove')
     print('4. Line Cutter')  
-    print('5. Separate Lines by Keyword')
+    print('5. Search and Extract Lines by Keyword')
     print('6. Exit')
     choice = input('>> ')
     if choice == '1':
@@ -37,10 +37,8 @@ def menu():
         combine_every_two_lines(file_path)  # Call the line cutter function
     elif choice == '5':
         input_file = input("Enter the input file path: ")
-        output_file = input("Enter the output file path: ")
         keyword = input("Enter the keyword or phrase to search for: ")
-        separate_lines(input_file, output_file, keyword)
-        print(f"Lines containing '{keyword}' separated into {output_file}")
+        extract_lines_with_keyword(input_file, keyword)
     elif choice == '6':
         exit()
     else:
@@ -107,11 +105,21 @@ def combine_every_two_lines(file_path):
     with open(file_path, 'w') as file:
         file.write('\n'.join(formatted_lines))
 
-def separate_lines(input_file, output_file, keyword):
-    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
-        for line in infile:
-            if keyword in line:
+def extract_lines_with_keyword(input_file, keyword):
+    try:
+        with open(input_file, 'r') as infile:
+            lines = infile.readlines()
+
+        matching_lines = [line for line in lines if keyword in line]
+
+        output_file = 'extracted_lines.txt'
+        with open(output_file, 'w') as outfile:
+            for line in matching_lines:
                 outfile.write(line)
+
+        print(f"Lines containing '{keyword}' extracted to {output_file}")
+    except FileNotFoundError:
+        print("Input file not found.")
 
 if __name__ == '__main__':
     while True:
